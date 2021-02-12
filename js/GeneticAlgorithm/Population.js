@@ -2,8 +2,9 @@ import { Snake } from "../Snake.js";
 
 const POPULATION_COUNT = 1000;
 const SNAKES_PER_POPULATION = 5;
-const MUTATION_RATE = 10;
+const MUTATION_NEURON_RATE = 0.10;
 const BEST_SNAKE_PERCENT = 50;
+const MUTATION_PERCENT = 0.50;
 
 
 export class Population {
@@ -35,7 +36,6 @@ export class Population {
         let lastSnake = Math.floor((BEST_SNAKE_PERCENT / 100) * snakes.length);
         let newPopulation = [];
         let populationCount = 0;
-        let bestSnake
         while (populationCount < POPULATION_COUNT) {
             let snakeCount = 0;
             let snakeGroup = [];
@@ -43,6 +43,9 @@ export class Population {
                 let [parent1, parent2] = this.selection(snakes, lastSnake);
                 let children = this.crossover(parent1, parent2);
                 let childIndex = Math.floor(Math.random() * 2);
+                if (Math.random < MUTATION_PERCENT) {
+                    this.mutation(children[childIndex], MUTATION_NEURON_RATE);
+                };
                 snakeGroup.push(children[childIndex]);
                 snakeCount++;
             }
@@ -57,6 +60,6 @@ export class Population {
         while (this.populationNumber < targetPopulation) {
             this.generateNextPopulation();
         }
-        //playGame for the first group of snakes
+        //playGame for the first group of snakes in the current population
     }
 }

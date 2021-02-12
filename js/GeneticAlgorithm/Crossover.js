@@ -1,5 +1,6 @@
 import { Snake } from "../Snake.js";
 
+//single point cross over
 export function crossover(parent1, parent2) {
     let config1 = parent1.getSnakeConfig();
     let config2 = parent2.getSnakeConfig();

@@ -1,4 +1,5 @@
 import { Directions } from "./Directions.js";
+import { getRandomValue } from "./NeuronValue.js";
 
 export class LayerConfig {
     constructor(neuronsCount) {
@@ -29,10 +30,6 @@ export class SnakeBrain {
         }
     }
 
-    getRandomValue() {
-        return Math.random() * 2 - 1;
-    }
-
     initRandomState() {
         this.values = [];
         let prevNeuronCount = this.layerConfig[0].neuronsCount;
@@ -40,9 +37,9 @@ export class SnakeBrain {
             let neuronsCount = this.layerConfig[layerIndex].neuronsCount;
             let neuronConfig = [];
             for (let i = 0; i < neuronsCount; i++) {
-                let curNeuronValues = { weights: [], bias: this.getRandomValue() };
+                let curNeuronValues = { weights: [], bias: getRandomValue() };
                 for (let j = 0; j < prevNeuronCount; j++) {
-                    curNeuronValues.weights.push(this.getRandomValue());
+                    curNeuronValues.weights.push(getRandomValue());
                 }
                 neuronConfig.push(curNeuronValues);
             }
