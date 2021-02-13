@@ -3,18 +3,21 @@ import { SnakeBrain } from "./SnakeBrain.js";
 export class Snake {
     constructor(config = undefined) {
         this.snakeBrain = new SnakeBrain(config);
-    }
-
-    setScore(score) {
-        this.score = score;
-    }
-
-    setTimeLived(timeLived) {
-        this.timeLived = timeLived;
+        this.score = 0;
+        this.timeLived = 0;
+        this.lastMove = null;
     }
 
     getSnakeConfig() {
         return this.snakeBrain.values;
+    }
+
+    update(gameState) {
+
+    }
+
+    draw(context) {
+
     }
 
     getFitness() {
