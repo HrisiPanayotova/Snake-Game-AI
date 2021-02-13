@@ -20,7 +20,7 @@ export class SnakeBrain {
         hiddenLayersConfig = HIDDEN_LAYER_CONFIG,
     ) {
         this.activationFunction = activationFunction;
-        this.layerConfig = [new LayerConfig(inputNeuronsCount), ...hiddenLayersConfig, new LayerConfig(4)];
+        this.layerConfig = [new LayerConfig(inputNeuronsCount), ...hiddenLayersConfig, new LayerConfig(3)];
         this.outputLayerValues = Object.values(Directions);
         if (!weightsConfig) {
             this.initRandomState();
