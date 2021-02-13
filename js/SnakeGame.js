@@ -1,11 +1,25 @@
+import { Snake } from "./Snake.js";
+
 export class SnakeGame {
+    /**@param {[{row: number, col: number}]} snakeCoordinates*/
+    /**@param {[{row: number, col: number}]} appleCoordinates*/
     constructor(canvas, snakeCoordinates, appleCoordinates) {
         this.canvas = canvas;
         /**@type {CanvasRenderingContext2D} */
         this.ctx = canvas.getContext("2d");
 
         this.snakes = [];
+        for (let arr of snakeCoordinates) {
+            this.snakes.push(new Snake(arr.row, arr.col));
+        }
+
+        this.snakes = [];
         this.apples = [];
+
+    }
+
+    finished() {
+        return false;
     }
 
     update() {
