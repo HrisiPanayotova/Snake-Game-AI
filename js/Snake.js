@@ -65,7 +65,18 @@ export class Snake {
     }
 
     vision(gameState) {
-        return getNeuronInputForPoint(this.head, gameState.apples, gameState.walls, gameState.bodies);
+        let walls = [];
+        for (let i = 0; i < gameState.canvasSize; i++) {
+            walls.push({ x: 0, y: i });
+            walls.push({ x: i, y: 0 });
+            walls.push({ x: i, y: gameState.canvasSize - 1 });
+            walls.push({ x: gameState.canvasSize - 1, y: i });
+        }
+        let visionInput = getNeuronInputForPoint(this.head, gameState.apples, walls, gameState.bodies);
+        let lastMoveIndex = Object.values(Directions).findIndex(elem => elem == this.lastMove);
+        let lastMoveNeurons = [-1, -1, -1, -1];
+        if (lastMoveIndex || lastMoveIndex == 0) lastMoveNeurons[lastMoveIndex] = 1;
+        return [...visionInput, ...lastMoveNeurons];
     }
 
     getFitness() {
