@@ -1,5 +1,6 @@
 import { Directions } from "./Directions.js";
 import { SnakeBrain } from "./SnakeBrain.js";
+import { getNeuronInputForPoint } from "./GeometryHelpers.js";
 
 class Node {
     constructor(row, col, isHead) {
@@ -64,7 +65,7 @@ export class Snake {
     }
 
     vision(gameState) {
-
+        return getNeuronInputForPoint(this.head, gameState.apples, gameState.walls, gameState.bodies);
     }
 
     getFitness() {
