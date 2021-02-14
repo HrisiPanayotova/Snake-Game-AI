@@ -1,4 +1,4 @@
-import { Snake } from "../Snake.js";
+import { SnakeBrain } from "../SnakeBrain.js";
 
 //single point cross over
 export function crossover(parent1, parent2) {
@@ -10,7 +10,7 @@ export function crossover(parent1, parent2) {
     let firstChildConf = createChild(config1, config2, layerSplit, neuronSplit);
     let secondChildConf = createChild(config2, config1, layerSplit, neuronSplit);
 
-    return [new Snake(firstChildConf), new Snake(secondChildConf)];
+    return [new SnakeBrain(firstChildConf), new SnakeBrain(secondChildConf)];
 }
 
 function createChild(conf1, conf2, layerIndex, neuronIndex) {

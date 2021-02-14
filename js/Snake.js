@@ -18,8 +18,6 @@ export class Snake {
         this.snakeBrain = snakeBrain;
         this.head = new Node(initX, initY);
         this.body = [this.head];
-        this.score = 0;
-        this.timeLived = 0;
         this.isHuman = isHuman;
         this.lastMove = null;
         this.lastInput = Directions.UP;
@@ -149,22 +147,19 @@ export class Snake {
 
     vision(gameState) {
         let walls = [];
-        for (let i = 0; i < gameState.canvasSize; i++) {
-            walls.push({ x: 0, y: i });
+        for (let i = 0; i < gameState.canvasSize.x; i++) {
             walls.push({ x: i, y: 0 });
-            walls.push({ x: i, y: gameState.canvasSize - 1 });
-            walls.push({ x: gameState.canvasSize - 1, y: i });
+            walls.push({ x: i, y: gameState.canvasSize.y - 1 });
+        }
+        for (let i = 0; i < gameState.canvasSize.y; i++) {
+            walls.push({ x: 0, y: i });
+            walls.push({ x: gameState.canvasSize.x, y: i });
         }
         let visionInput = getNeuronInputForPoint(this.head, gameState.apples, walls, gameState.bodies);
         let lastMoveIndex = Object.values(Directions).findIndex(elem => elem == this.lastMove);
         let lastMoveNeurons = [-1, -1, -1, -1];
         if (lastMoveIndex || lastMoveIndex == 0) lastMoveNeurons[lastMoveIndex] = 1;
         return [...visionInput, ...lastMoveNeurons];
-    }
-
-    getFitness() {
-        let fitness = this.timeLived + (Math.pow(2, this.score) + Math.pow(this.score, 2.1) * 500) - (Math.pow(this.score, 1.2) * Math.pow(0.25 * this.timeLived, 1.3));
-        return fitness;
     }
 
     subscribeKeyboardInputs() {

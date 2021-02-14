@@ -1,7 +1,7 @@
 import { getRandomValue } from "../NeuronValue.js"
 
 //uniform mutation
-function mutation(snake, mutationRate) {
+export function mutation(snake, mutationRate) {
     let config = snake.getSnakeConfig();
     for (let layer of config) {
         for (let neuron of layer) {
