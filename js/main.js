@@ -6,7 +6,7 @@ import { SnakeGame } from "./SnakeGame.js";
 // let snake = new SnakeBrain();
 // console.log(snake.getDecision([2, 5, 5, 6, 7, 2, 5, 5, 6, 7, 2, 5, 5, 6, 7, 2, 5, 5, 6, 7, 1, 2, 3, 4]));
 
-const GAME_SPEED = 1;
+const GAME_SPEED = 20;
 
 /**@type {SnakeGame} */
 let snakeGame;
@@ -15,18 +15,16 @@ function init() {
     /**@type {HTMLCanvasElement} */
     const canvas = document.getElementById("canvas");
 
-    var rows = canvas.height;
-    var cols = canvas.width;
-    var snakeCoords = [{ row: rows / 2, col: cols / 2 }];
-    var appleCoords = [{ row: 31, col: 12 }, { row: 16, col: 32 }, { row: 96, col: 32 }];
-    snakeGame = new SnakeGame(document.getElementById("canvas"), snakeCoords, appleCoords);
+    var snakeCoords = [{ x: 200, y: 200 }];
+    var appleCoords = [{ x: 120, y: 140 }, { x: 240, y: 20 }, { x: 280, y: 360 }];
+    snakeGame = new SnakeGame(canvas, snakeCoords, appleCoords);
 
     window.requestAnimationFrame(main);
 }
 
 let lastRenderTime = 0;
 function main(currentTime) {
-    if (snakeGame.finished()) {
+    if (snakeGame.finished) {
         alert("Game finished!");
         return;
     }
@@ -38,7 +36,6 @@ function main(currentTime) {
 
     lastRenderTime = currentTime;
 
-    console.log(secondsSinceLastRender);
     update();
     draw();
 }
