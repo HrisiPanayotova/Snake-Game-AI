@@ -8,7 +8,7 @@ export class LayerConfig {
 }
 
 const DEFAULT_ACTIVATION_FUNCTION = (x => 1.0 / (1.0 + Math.exp(-x)));
-const INPUT_NEURON_COUNT = 24;
+const INPUT_NEURON_COUNT = 28;
 const HIDDEN_LAYER_CONFIG = [new LayerConfig(16), new LayerConfig(16)];
 
 
