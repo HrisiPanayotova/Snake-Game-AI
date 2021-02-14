@@ -3,11 +3,12 @@ import { mutation } from "./Mutation.js";
 import { selection } from "./Selection.js";
 import { crossover } from "./Crossover.js";
 
-const POPULATION_COUNT = 10;
-const SNAKES_PER_POPULATION = 1;
+const POPULATION_COUNT = 20;
+const SNAKES_PER_POPULATION = 5;
 const MUTATION_NEURON_RATE = 0.10;
 const BEST_SNAKE_PERCENT = 50;
 const MUTATION_PERCENT = 0.50;
+const OLD_PERCENT = 0.10;
 
 
 export class Population {
@@ -37,12 +38,18 @@ export class Population {
         let snakes = [].concat(...this.population);
         snakes = snakes.sort((snake1, snake2) => snake1.getFitness() < snake2.getFitness());
         let lastSnake = Math.floor((BEST_SNAKE_PERCENT / 100) * snakes.length);
+        let oldSnakes = snakes.slice(0, Math.floor(OLD_PERCENT * snakes.length));
         let newPopulation = [];
-        let populationCount = 0;
+        let populationCount = newPopulation.length;
         while (populationCount < POPULATION_COUNT) {
             let snakeCount = 0;
             let snakeGroup = [];
             while (snakeCount < SNAKES_PER_POPULATION) {
+                if (oldSnakes.length) {
+                    snakeGroup.push(oldSnakes.pop());
+                    snakeCount++;
+                    continue;
+                }
                 let [parent1, parent2] = this.selection(snakes, lastSnake);
                 let children = this.crossover(parent1, parent2);
                 let childIndex = Math.floor(Math.random() * 2);

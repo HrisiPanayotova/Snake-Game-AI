@@ -1,4 +1,4 @@
-export const GAME_SPEED = 100;
+export const GAME_SPEED = 50;
 export const GAME_OBJ_SIZE = 20;
 
 export const CANVAS_WIDTH = 500;
