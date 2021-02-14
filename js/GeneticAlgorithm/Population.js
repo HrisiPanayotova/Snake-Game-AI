@@ -4,7 +4,7 @@ import { mutation } from "./Mutation.js";
 import { selection } from "./Selection.js";
 import { crossover } from "./Crossover.js";
 
-const POPULATION_COUNT = 100;
+const POPULATION_COUNT = 10;
 const SNAKES_PER_POPULATION = 5;
 const MUTATION_NEURON_RATE = 0.10;
 const BEST_SNAKE_PERCENT = 50;

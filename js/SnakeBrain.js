@@ -21,13 +21,15 @@ export class SnakeBrain {
         hiddenLayersConfig = HIDDEN_LAYER_CONFIG,
     ) {
         this.activationFunction = activationFunction;
-        this.layerConfig = [new LayerConfig(inputNeuronsCount), ...hiddenLayersConfig, new LayerConfig(3)];
+        this.layerConfig = [new LayerConfig(inputNeuronsCount), ...hiddenLayersConfig, new LayerConfig(4)];
         this.outputLayerValues = Object.values(Directions);
         if (!weightsConfig) {
             this.initRandomState();
         } else {
             this.values = weightsConfig;
         }
+        // this.score = Math.floor(Math.random() * 15);
+        // this.timeLived = Math.floor(Math.random() * 50);
         this.score = 0;
         this.timeLived = 0;
     }
@@ -37,7 +39,7 @@ export class SnakeBrain {
     }
 
     getSnakeConfig() {
-        return this.weightsConfig;
+        return this.values;
     }
 
     updateTimeLived() {
