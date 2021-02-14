@@ -1,4 +1,15 @@
-import { GAME_OBJ_SIZE } from "./Settings.js";
+import { GAME_OBJ_SIZE, CANVAS_WIDTH, CANVAS_HEIGHT } from "./Settings.js";
+
+const walls = [];
+for (let i = 0; i < CANVAS_WIDTH / GAME_OBJ_SIZE; i++) {
+    walls.push({ x: i, y: 0 });
+    walls.push({ x: i, y: CANVAS_HEIGHT / GAME_OBJ_SIZE - 1 });
+}
+
+for (let i = 0; i < CANVAS_HEIGHT / GAME_OBJ_SIZE; i++) {
+    walls.push({ x: 0, y: i });
+    walls.push({ x: CANVAS_WIDTH / GAME_OBJ_SIZE, y: i });
+}
 
 function getLineByPoints(point1, point2) {
     let { x: x1, y: y1 } = point1;
@@ -72,7 +83,7 @@ function getClosestFromSet(point, filter, objects) {
     return mappedToDistance.length ? Math.min(...mappedToDistance) : -1;
 }
 
-export function getNeuronInputForPoint(point, apples, walls, bodies) {
+export function getNeuronInputForPoint(point, apples, bodies) {
     let bodiesWithoutCurrent = bodies.filter(elem => elem.y != point.y || elem.x != point.x);
     let centerPoint = { y: point.y / GAME_OBJ_SIZE + 1 / 2, x: point.x / GAME_OBJ_SIZE + 1 / 2 };
     let neuronInput = [];
