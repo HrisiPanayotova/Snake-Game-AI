@@ -1,27 +1,28 @@
 import { Snake } from "./Snake.js";
+import { GAME_OBJ_SIZE, CANVAS_HEIGHT, CANVAS_WIDTH } from "./Settings.js";
+import { flatMap } from "./Helpers.js";
 
 export class SnakeGame {
     /**
      * @param {[{x: number, y: number}]} snakeCoordinates
      * @param {[{x: number, y: number}]} appleCoordinates
-     * @param {HTMLCanvasElement} canvas
+     * @param {CanvasRenderingContext2D} ctx
     */
-    constructor(canvas, snakeCoordinates, appleCoordinates) {
-        this.canvas = canvas;
-        /**@type {CanvasRenderingContext2D} */
-        this.ctx = canvas.getContext("2d");
-
+    constructor(ctx, snakeCoordinates, appleCoordinates) {
         this.gameState = {
-            apples: appleCoordinates,
+            apples: [...appleCoordinates],
             bodies: [],
-            canvasSize: { x: this.canvas.width, y: this.canvas.height },
         };
 
         this.snakes = [];
-        for (let arr of snakeCoordinates) {
-            this.snakes.push(new Snake(arr.x, arr.y, 20, true));
+        for (let { x, y } of snakeCoordinates) {
+            this.snakes.push(new Snake(x, y, true));
         }
+
+        this.gameState.bodies = flatMap((snake) => snake.body, this.snakes);
+
         this.finished = false;
+        this.ctx = ctx;
     }
 
     update() {
@@ -42,13 +43,14 @@ export class SnakeGame {
                 this.spawnNewApple();
             }
 
+            this.gameState.bodies = flatMap((snake) => snake.body, this.snakes);
         }
     }
 
     draw() {
         // clear
-        this.ctx.fillStyle = '#232323'
-        this.ctx.fillRect(0, 0, canvas.width, canvas.height)
+        this.ctx.fillStyle = '#232323';
+        this.ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
         //draw apples
         this.ctx.fillStyle = 'rgb(200,0,0)';
@@ -66,6 +68,9 @@ export class SnakeGame {
     }
 
     spawnNewApple() {
-
+        let appleX = Math.floor(Math.random() * (CANVAS_WIDTH / GAME_OBJ_SIZE)) * GAME_OBJ_SIZE;
+        let appleY = Math.floor(Math.random() * (CANVAS_HEIGHT / GAME_OBJ_SIZE)) * GAME_OBJ_SIZE;
+        let apple = { x: appleX, y: appleY };
+        this.gameState.apples.push(apple);
     }
 }

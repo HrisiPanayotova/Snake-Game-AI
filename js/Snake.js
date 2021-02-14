@@ -1,6 +1,7 @@
 import { Directions as Directions } from "./Directions.js";
 import { SnakeBrain } from "./SnakeBrain.js";
 import { getNeuronInputForPoint } from "./GeometryHelpers.js";
+import { GAME_OBJ_SIZE, CANVAS_HEIGHT, CANVAS_WIDTH } from "./Settings.js";
 
 class Node {
     constructor(x, y) {
@@ -13,10 +14,9 @@ export class Snake {
     /**
      * @param {SnakeBrain} snakeBrain
      */
-    constructor(initX, initY, bodySize, isHuman, snakeBrain = null) {
-        this.snakeBrain = snakeBrain || new SnakeBrain();
-        this.bodySize = bodySize;
-        this.head = new Node(initX, initY, bodySize, true);
+    constructor(initX, initY, isHuman, snakeBrain = null) {
+        this.snakeBrain = snakeBrain;
+        this.head = new Node(initX, initY);
         this.body = [this.head];
         this.isHuman = isHuman;
         this.lastMove = null;
@@ -35,8 +35,7 @@ export class Snake {
     /**
      * 
      * @param {{apples: [{x: number, y: number}],
-     *          bodies: [{x: number, y: number}],
-     *          canvasSize: {x: number, y: number}}} gameState 
+     *          bodies: Node[]} gameState 
      */
     update(gameState) {
         let newMove = this.nextMove(gameState);
@@ -48,8 +47,8 @@ export class Snake {
 
         this.moveSnake(newMove);
 
-        if (this.wallCollision(gameState.canvasSize) ||
-            this.bodyCollision(gameState.bodies)) {
+        if (this.wallCollision() ||
+            this.selfBodyCollision()) {
             this.isDead = true;
             return 0;
         }
@@ -58,7 +57,7 @@ export class Snake {
         if (this.appleCollision(gameState.apples)) {
             appleEaten = true;
             gameState.apples = gameState.apples
-                .filter(({ x, y }) => x !== this.head.x && y !== this.head.y);
+                .filter(({ x, y }) => x !== this.head.x || y !== this.head.y);
             this.body.push(new Node(lastX, lastY, false));
         }
 
@@ -74,13 +73,13 @@ export class Snake {
     /** @param {CanvasRenderingContext2D} ctx2d */
     draw(ctx2d) {
         ctx2d.fillStyle = 'rgb(0,200,200)';
-        ctx2d.fillRect(this.head.x, this.head.y, this.bodySize, this.bodySize);
-        ctx2d.strokeRect(this.head.x, this.head.y, this.bodySize, this.bodySize);
+        ctx2d.fillRect(this.head.x, this.head.y, GAME_OBJ_SIZE, GAME_OBJ_SIZE);
+        ctx2d.strokeRect(this.head.x, this.head.y, GAME_OBJ_SIZE, GAME_OBJ_SIZE);
 
         ctx2d.fillStyle = 'rgb(0,200,0)';
         for (let i = 1; i < this.body.length; i++) {
-            ctx2d.fillRect(this.body[i].x, this.body[i].y, this.bodySize, this.bodySize);
-            ctx2d.strokeRect(this.body[i].x, this.body[i].y, this.bodySize, this.bodySize);
+            ctx2d.fillRect(this.body[i].x, this.body[i].y, GAME_OBJ_SIZE, GAME_OBJ_SIZE);
+            ctx2d.strokeRect(this.body[i].x, this.body[i].y, GAME_OBJ_SIZE, GAME_OBJ_SIZE);
         }
     }
 
@@ -111,30 +110,33 @@ export class Snake {
 
         switch (newMove) {
             case Directions.RIGHT:
-                this.head.x += this.bodySize;
+                this.head.x += GAME_OBJ_SIZE;
                 break;
             case Directions.LEFT:
-                this.head.x -= this.bodySize;
+                this.head.x -= GAME_OBJ_SIZE;
                 break;
             case Directions.UP:
-                this.head.y -= this.bodySize;
+                this.head.y -= GAME_OBJ_SIZE;
                 break;
             case Directions.DOWN:
-                this.head.y += this.bodySize;
+                this.head.y += GAME_OBJ_SIZE;
                 break;
         }
     }
 
-    /** @param {{x: number, y: number}} canvasSize */
-    wallCollision(canvasSize) {
-
+    wallCollision() {
         return this.head.x < 0 ||
             this.head.y < 0 ||
-            this.head.x > canvasSize.x ||
-            this.head.y > canvasSize.y;
+            this.head.x >= CANVAS_WIDTH ||
+            this.head.y >= CANVAS_HEIGHT;
     }
 
-    bodyCollision(gameState) {
+    selfBodyCollision() {
+        for (let i = 1; i < this.body.length; i++) {
+            if (this.head.x == this.body[i].x && this.head.y == this.body[i].y) {
+                return true;
+            }
+        }
         return false;
     }
 
