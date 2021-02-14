@@ -1,6 +1,6 @@
 import { Snake } from "../Snake.js";
 
-const POPULATION_COUNT = 1000;
+const POPULATION_COUNT = 100;
 const SNAKES_PER_POPULATION = 5;
 const MUTATION_NEURON_RATE = 0.10;
 const BEST_SNAKE_PERCENT = 50;
