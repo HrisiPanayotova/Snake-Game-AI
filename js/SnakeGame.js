@@ -8,17 +8,16 @@ export class SnakeGame {
      * @param {[{x: number, y: number}]} appleCoordinates
      * @param {CanvasRenderingContext2D} ctx
     */
-    constructor(ctx, snakeCoordinates, appleCoordinates) {
+    constructor(ctx, snakes, appleCoordinates) {
         this.gameState = {
             apples: [...appleCoordinates],
             bodies: [],
         };
 
-        this.snakes = [];
-        for (let { x, y } of snakeCoordinates) {
-            this.snakes.push(new Snake(x, y, true));
-        }
-
+        this.snakes = [...snakes];
+        // for (let { x, y } of snakeCoordinates) {
+        //     this.snakes.push(new Snake(x, y, true));
+        // }
         this.gameState.bodies = flatMap((snake) => snake.body, this.snakes);
 
         this.finished = false;

@@ -1,7 +1,7 @@
 import { Directions as Directions } from "./Directions.js";
 import { SnakeBrain } from "./SnakeBrain.js";
 import { getNeuronInputForPoint } from "./GeometryHelpers.js";
-import { GAME_OBJ_SIZE, CANVAS_HEIGHT, CANVAS_WIDTH } from "./Settings.js";
+import { GAME_OBJ_SIZE, CANVAS_HEIGHT, CANVAS_WIDTH, SNAKE_LIVE_TICKS_NO_APPLE } from "./Settings.js";
 
 class Node {
     constructor(x, y) {
@@ -22,6 +22,7 @@ export class Snake {
         this.lastMove = null;
         this.lastInput = Directions.UP;
         this.isDead = false;
+        this.timeLivedNoApple = 0;
 
         if (this.isHuman) {
             this.subscribeKeyboardInputs();
@@ -39,6 +40,7 @@ export class Snake {
      */
     update(gameState) {
         let newMove = this.nextMove(gameState);
+        this.timeLivedNoApple += 1;
 
         //if we need to incr snake
         let last = this.body[this.body.length - 1];
@@ -48,7 +50,8 @@ export class Snake {
         this.moveSnake(newMove);
 
         if (this.wallCollision() ||
-            this.selfBodyCollision()) {
+            this.selfBodyCollision() ||
+            this.timeLivedNoApple > SNAKE_LIVE_TICKS_NO_APPLE) {
             this.isDead = true;
             return 0;
         }
@@ -56,6 +59,8 @@ export class Snake {
         let appleEaten = false;
         if (this.appleCollision(gameState.apples)) {
             appleEaten = true;
+            this.timeLivedNoApple = 0;
+            this.snakeBrain.updateScore();
             gameState.apples = gameState.apples
                 .filter(({ x, y }) => x !== this.head.x || y !== this.head.y);
             this.body.push(new Node(lastX, lastY, false));
@@ -66,6 +71,7 @@ export class Snake {
         if (appleEaten) {
             return 1;
         }
+        this.snakeBrain.updateTimeLived();
 
         return 0;
     }
@@ -147,13 +153,13 @@ export class Snake {
 
     vision(gameState) {
         let walls = [];
-        for (let i = 0; i < gameState.canvasSize.x; i++) {
+        for (let i = 0; i < CANVAS_WIDTH; i++) {
             walls.push({ x: i, y: 0 });
-            walls.push({ x: i, y: gameState.canvasSize.y - 1 });
+            walls.push({ x: i, y: CANVAS_HEIGHT - 1 });
         }
-        for (let i = 0; i < gameState.canvasSize.y; i++) {
+        for (let i = 0; i < CANVAS_HEIGHT; i++) {
             walls.push({ x: 0, y: i });
-            walls.push({ x: gameState.canvasSize.x, y: i });
+            walls.push({ x: CANVAS_WIDTH, y: i });
         }
         let visionInput = getNeuronInputForPoint(this.head, gameState.apples, walls, gameState.bodies);
         let lastMoveIndex = Object.values(Directions).findIndex(elem => elem == this.lastMove);
