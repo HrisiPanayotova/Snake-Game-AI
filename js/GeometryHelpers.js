@@ -1,3 +1,5 @@
+import { GAME_OBJ_SIZE } from "./Settings.js";
+
 function getLineByPoints(point1, point2) {
     let { x: x1, y: y1 } = point1;
     let { x: x2, y: y2 } = point2;
@@ -72,12 +74,13 @@ function getClosestFromSet(point, filter, objects) {
 
 export function getNeuronInputForPoint(point, apples, walls, bodies) {
     let bodiesWithoutCurrent = bodies.filter(elem => elem.y != point.y || elem.x != point.x);
-    let centerPoint = { y: point.y + 1 / 2, x: point.x + 1 / 2 };
+    let centerPoint = { y: point.y / GAME_OBJ_SIZE + 1 / 2, x: point.x / GAME_OBJ_SIZE + 1 / 2 };
     let neuronInput = [];
     let objects = [apples, walls, bodiesWithoutCurrent];
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < objects.length; j++) {
-            neuronInput.push(getClosestFromSet(centerPoint, partitionFilters[i], objects[j]));
+            let objs = objects[j].map(elem => ({ x: elem.x / GAME_OBJ_SIZE, y: elem.y / GAME_OBJ_SIZE }));
+            neuronInput.push(getClosestFromSet(centerPoint, partitionFilters[i], objs));
         }
     }
     return neuronInput;

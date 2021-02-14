@@ -1,11 +1,10 @@
-import { Snake } from "../Snake.js";
 import { SnakeBrain } from "../SnakeBrain.js";
 import { mutation } from "./Mutation.js";
 import { selection } from "./Selection.js";
 import { crossover } from "./Crossover.js";
 
 const POPULATION_COUNT = 10;
-const SNAKES_PER_POPULATION = 5;
+const SNAKES_PER_POPULATION = 1;
 const MUTATION_NEURON_RATE = 0.10;
 const BEST_SNAKE_PERCENT = 50;
 const MUTATION_PERCENT = 0.50;
@@ -36,7 +35,7 @@ export class Population {
         console.log(`Evaluation of population - ${this.populationNumber}`);
         //play game for each group of snakes for current population and evaluate score and timelived for each snake
         let snakes = [].concat(...this.population);
-        snakes = snakes.sort((snake1, snake2) => snake1.getFitness() > snake2.getFitness());
+        snakes = snakes.sort((snake1, snake2) => snake1.getFitness() < snake2.getFitness());
         let lastSnake = Math.floor((BEST_SNAKE_PERCENT / 100) * snakes.length);
         let newPopulation = [];
         let populationCount = 0;
