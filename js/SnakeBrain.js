@@ -8,6 +8,7 @@ export class LayerConfig {
 }
 
 const DEFAULT_ACTIVATION_FUNCTION = (x => 1.0 / (1.0 + Math.exp(-x)));
+//const testActivation = (x => x < 0 ? 0 : x);
 const INPUT_NEURON_COUNT = 28;
 const HIDDEN_LAYER_CONFIG = [new LayerConfig(16), new LayerConfig(16)];
 
@@ -16,11 +17,11 @@ export class SnakeBrain {
 
     constructor(
         weightsConfig = undefined,
-        activationFunction = DEFAULT_ACTIVATION_FUNCTION,
+        activeFunction = DEFAULT_ACTIVATION_FUNCTION,
         inputNeuronsCount = INPUT_NEURON_COUNT,
         hiddenLayersConfig = HIDDEN_LAYER_CONFIG,
     ) {
-        this.activationFunction = activationFunction;
+        this.activationFunction = activeFunction;
         this.layerConfig = [new LayerConfig(inputNeuronsCount), ...hiddenLayersConfig, new LayerConfig(4)];
         this.outputLayerValues = Object.values(Directions);
         if (!weightsConfig) {
@@ -47,8 +48,7 @@ export class SnakeBrain {
     }
 
     getFitness() {
-        let fitness = this.timeLived + (Math.pow(2, this.score) + Math.pow(this.score, 2.1) * 500) - (Math.pow(this.score, 1.2) * Math.pow(0.25 * this.timeLived, 1.3));
-        return fitness;
+        return this.timeLived * Math.pow(this.score, 2);
     }
 
 
@@ -74,8 +74,8 @@ export class SnakeBrain {
         for (let value of this.values) {
             let newInput = [];
             for (let neuronVals of value) {
-                let resultVal = -1 * neuronVals.bias;
-                for (let i = 0; i < neuronVals.weights; i++) {
+                let resultVal = neuronVals.bias;
+                for (let i = 0; i < neuronVals.weights.length; i++) {
                     resultVal += input[i] * neuronVals.weights[i];
                 }
                 resultVal = this.activationFunction(resultVal);
