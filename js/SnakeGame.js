@@ -42,7 +42,7 @@ export class SnakeGame {
                 this.spawnNewApple();
             }
 
-            this.gameState.bodies = flatMap((snake) => snake.body, this.snakes);
+            this.gameState.bodies = flatMap((snake) => snake.body, this.snakes.filter(sn => !sn.isDead));
         }
     }
 
@@ -54,7 +54,7 @@ export class SnakeGame {
         //draw apples
         this.ctx.fillStyle = 'rgb(200,0,0)';
         for (let { x, y } of this.gameState.apples) {
-            this.ctx.fillRect(x, y, 20, 20);
+            this.ctx.fillRect(x, y, GAME_OBJ_SIZE, GAME_OBJ_SIZE);
         }
 
         //draw snakes
