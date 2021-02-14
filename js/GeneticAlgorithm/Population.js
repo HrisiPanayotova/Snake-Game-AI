@@ -1,4 +1,8 @@
 import { Snake } from "../Snake.js";
+import { SnakeBrain } from "../SnakeBrain.js";
+import { mutation } from "./Mutation.js";
+import { selection } from "./Selection.js";
+import { crossover } from "./Crossover.js";
 
 const POPULATION_COUNT = 100;
 const SNAKES_PER_POPULATION = 5;
@@ -9,10 +13,10 @@ const MUTATION_PERCENT = 0.50;
 
 export class Population {
 
-    constructor(selection, mutation, crossover) {
-        this.selection = selection;
-        this.mutation = mutation;
-        this.crossover = crossover;
+    constructor(selectionF = selection, mutationF = mutation, crossoverF = crossover) {
+        this.selection = selectionF;
+        this.mutation = mutationF;
+        this.crossover = crossoverF;
         this.initPopulation();
         this.populationNumber = 0;
     }
@@ -22,7 +26,7 @@ export class Population {
         for (let i = 0; i < POPULATION_COUNT; i++) {
             let singlePopulation = [];
             for (let j = 0; j < SNAKES_PER_POPULATION; j++) {
-                singlePopulation.push(new Snake());
+                singlePopulation.push(new SnakeBrain());
             }
             this.population.push(singlePopulation);
         }

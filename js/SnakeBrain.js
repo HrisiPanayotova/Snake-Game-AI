@@ -28,7 +28,27 @@ export class SnakeBrain {
         } else {
             this.values = weightsConfig;
         }
+        this.score = 0;
+        this.timeLived = 0;
     }
+
+    updateScore() {
+        this.score++;
+    }
+
+    getSnakeConfig() {
+        return this.weightsConfig;
+    }
+
+    updateTimeLived() {
+        this.timeLived++;
+    }
+
+    getFitness() {
+        let fitness = this.timeLived + (Math.pow(2, this.score) + Math.pow(this.score, 2.1) * 500) - (Math.pow(this.score, 1.2) * Math.pow(0.25 * this.timeLived, 1.3));
+        return fitness;
+    }
+
 
     initRandomState() {
         this.values = [];

@@ -14,12 +14,10 @@ export class Snake {
      * @param {SnakeBrain} snakeBrain
      */
     constructor(initX, initY, bodySize, isHuman, snakeBrain = null) {
-        this.snakeBrain = snakeBrain;
+        this.snakeBrain = snakeBrain || new SnakeBrain();
         this.bodySize = bodySize;
         this.head = new Node(initX, initY, bodySize, true);
         this.body = [this.head];
-        this.score = 0;
-        this.timeLived = 0;
         this.isHuman = isHuman;
         this.lastMove = null;
         this.lastInput = Directions.UP;
@@ -160,11 +158,6 @@ export class Snake {
         let lastMoveNeurons = [-1, -1, -1, -1];
         if (lastMoveIndex || lastMoveIndex == 0) lastMoveNeurons[lastMoveIndex] = 1;
         return [...visionInput, ...lastMoveNeurons];
-    }
-
-    getFitness() {
-        let fitness = this.timeLived + (Math.pow(2, this.score) + Math.pow(this.score, 2.1) * 500) - (Math.pow(this.score, 1.2) * Math.pow(0.25 * this.timeLived, 1.3));
-        return fitness;
     }
 
     subscribeKeyboardInputs() {
